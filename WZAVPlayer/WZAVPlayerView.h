@@ -11,6 +11,7 @@
 
 @class WZAVPlayerView;
 @protocol WZAVPlayerViewDelegate <NSObject>
+- (void)playerViewLiveDidChanged:(WZAVPlayerView *)view changeToValue:(BOOL)isLive;
 - (void)playerViewSeekingBegan:(WZAVPlayerView *)view;
 - (void)playerViewSeekingCompletation:(WZAVPlayerView *)view;
 @end
@@ -33,6 +34,7 @@
 @property (nonatomic, retain) IBOutlet UISlider *scrubber;
 
 @property (retain, readwrite) NSString *title;
+@property (assign, readwrite) NSTimeInterval estimateDuration;
 @property (assign, readonly) BOOL isPlayerOpened;
 @property (assign, readonly) BOOL isPlaying; // playing, except buffering
 @property (assign, readonly) BOOL isPaused; // paused, except buffering
@@ -54,6 +56,7 @@
 - (void)presentOverlayWithDuration:(NSTimeInterval)duration;
 - (void)dismissOverlayWithDuration:(NSTimeInterval)duration;
 - (void)toggleOverlayWithDuration:(NSTimeInterval)duration;
+- (CMTime)playerCurrentPosition;
 - (CMTime)playerItemDuration;
 - (void)addPlayerTimeObserverForInterval:(NSTimeInterval)interval;
 
@@ -75,7 +78,6 @@
 
 - (void)resetStatus;
 - (void)resetPlayPosition;
-- (void)rememberEndPosition;
 - (void)refreshPlayPosition;
 - (void)resetIdleTimer;
 - (void)beginPlayerTimeObserver;

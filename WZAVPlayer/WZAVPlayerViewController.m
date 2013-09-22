@@ -303,17 +303,22 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
 }
 
-- (void)reopen
+- (void)reopenWithPosition:(NSTimeInterval)position
 {
     if (_contentURL) {
-        // get current position and set it when content is reopened
-        double position = CMTimeGetSeconds([_player currentTime]);
         if (position > 0) {
             _initialPlaybackTime = position;
         }
         _reopening = YES;
         [self internalSetContentURL:_contentURL];
     }
+}
+
+- (void)reopen
+{
+    // get current position and set it when content is reopened
+    double position = CMTimeGetSeconds([_player currentTime]);
+    [self reopenWithPosition:position];
 }
 
 - (void)tryAutoPlayWithDelay:(NSTimeInterval)delay
@@ -482,6 +487,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
     // create player via play
     if (_player) {
         [self cancelObserveAVPlayer:_player];
+        [self playerDidReplaceFromPlayer:_player];
         _player = nil;
 	}
     
@@ -676,6 +682,14 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
 }
 
 #pragma mark - PlayerView Delegate
+
+- (void)playerViewLiveDidChanged:(WZAVPlayerView *)view changeToValue:(BOOL)isLive
+{
+    // LiveMode to RecordedMode, then reopen and play
+    if (!isLive) {
+        [self reopenWithPosition:0];
+    }
+}
 
 - (void)playerViewSeekingBegan:(WZAVPlayerView *)view
 {
@@ -877,7 +891,6 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
     _player.actionAtItemEnd = AVPlayerActionAtItemEndPause;
     [self hideProgress];
     [_playerView refreshControls];
-    [_playerView resetPlayPosition];
 }
 
 - (void)playerDidBeginPlayback
@@ -891,7 +904,6 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
 {
     WZLogD(@"WZAVPlayerViewController.playerDidEndPlayback");
     [self close];
-//    [self hideProgress];
 }
 
 - (void)playerDidReachEndPlayback
@@ -899,12 +911,11 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
     WZLogD(@"WZAVPlayerViewController.playerDidReachEndPlayback");
     _mediaEnded = YES;
     [self close];
-//    [self hideProgress];
-//    [_playerView pause];
-//    [_playerView endPlayerTimeObserver];
-//    [_playerView rememberEndPosition];
-//    [_playerView refreshPlayPosition];    
-//    [_playerView refreshControls];
+}
+
+- (void)playerDidReplaceFromPlayer:(AVPlayer *)oldPlayer
+{
+    WZLogD(@"WZAVPlayerViewController.playerDidReplaceFromPlayer");
 }
 
 - (void)playerFailedToPrepareForPlayback:(NSError *)error

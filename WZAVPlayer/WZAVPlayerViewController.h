@@ -28,6 +28,10 @@
 - (void)pause;
 - (void)close;
 
+- (void)requireAudioPlayback;
+- (void)reopen;
+- (void)tryAutoPlayWithDelay:(NSTimeInterval)delay;
+
 - (void)refreshForReadyToPlayIfPlaying;
 - (void)refreshForReadyToPlayIfPlayingWithDelay:(NSTimeInterval)delay;
 
@@ -41,6 +45,7 @@
 - (void)playerDidBeginPlayback;
 - (void)playerDidEndPlayback;
 - (void)playerDidReachEndPlayback;
+- (void)playerDidReplaceFromPlayer:(AVPlayer *)oldPlayer;
 - (void)playerFailedToPrepareForPlayback:(NSError *)error;
 
 @end

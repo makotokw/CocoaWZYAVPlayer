@@ -22,12 +22,12 @@
     
     WZPlayerSlider *_playerSlider;
     
+    BOOL _isLive;
     BOOL _backButtonHidden;
     
 	float _playerRateBeforeScrubbing;
     BOOL _scrubbing;
     NSTimeInterval _seekingToTime;
-    NSTimeInterval _playPositionAtEnd;
 	id _timeObserver;
     
     UITapGestureRecognizer *_tapGestureRecognizer;
@@ -37,6 +37,7 @@
 
 @dynamic player;
 @dynamic title;
+@synthesize estimateDuration = _estimateDuration;
 @dynamic backButtonHidden;
 @dynamic isPlayerOpened;
 @dynamic isPlaying;
@@ -145,6 +146,13 @@
     _titleLabel.text = title;
 }
 
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+{
+    UIView* view = [super hitTest:point withEvent:event];
+    [self resetIdleTimer];
+    return view;
+}
+
 - (UIResponder *)nextResponder
 {
     [self resetIdleTimer];
@@ -159,7 +167,7 @@
 - (void)resetIdleTimer
 {    
     if (!_idleTimer) {
-        if ((_controlView.alpha != 0.0 || _headerView.alpha != 0.0) && ![self isScrubbing]) {
+        if ((_controlView.alpha != 0.0 || _headerView.alpha != 0.0) && !self.isScrubbing) {
             _idleTimer = [NSTimer scheduledTimerWithTimeInterval:[self idleTimeIntervalToHideOlverlay]
                                                           target:self
                                                         selector:@selector(idleTimerExceeded)
@@ -260,6 +268,11 @@
 	playerLayer.videoGravity = fillMode;
 }
 
+- (CMTime)playerCurrentPosition
+{
+    return _player.currentTime;
+}
+
 - (CMTime)playerItemDuration
 {
 	AVPlayerItem *playerItem = _player.currentItem;
@@ -353,7 +366,7 @@
 
 - (void)refreshControls
 {
-    if (!self.isPaused) {
+    if (self.isPlaying) {
         [_playButton setImage:_pauseButtonImage forState:UIControlStateNormal];
         [self refreshPlayPosition];
     } else {
@@ -445,15 +458,11 @@
 
 - (void)resetPlayPosition
 {
-    _playPositionAtEnd = 0.0f;
+    _isLive = NO;
+    _estimateDuration = 0.0f;
     _scrubber.value = 0.0;
     _currentTimeLabel.text = kInitialTimeString;
     _durationLabel.text = kInitialTimeString;
-}
-
-- (void)rememberEndPosition
-{
-    _playPositionAtEnd = CMTimeGetSeconds([_player currentTime]);
 }
 
 - (void)refreshPlayPosition
@@ -464,24 +473,31 @@
         return;
     }
     
-    if ([self isScrubbing] || [self isSeeking]) {
+    if (self.isScrubbing || self.isSeeking) {
         return;
     }
     
-	CMTime playerDuration = [self playerItemDuration];
+	CMTime playerDuration = self.playerItemDuration;
 	if (CMTIME_IS_INVALID(playerDuration)) {
         _scrubber.minimumValue = 0.0;
         [self disableSeekControls];
 		return;
 	}
     
+    CMTime playerCurrentTime = _player.currentTime;
+    
     double duration = CMTimeGetSeconds(playerDuration);
-    double time = CMTimeGetSeconds([_player currentTime]);
+    double currentTime = CMTimeGetSeconds(playerCurrentTime);
     
     if (CMTIME_IS_INDEFINITE(playerDuration)) {
         [self disableSeekControls];
         _playerSlider.availableDuration = 0.0;
-        _playerSlider.duration = time;
+        if (_estimateDuration > 0.0f) {
+            duration = _estimateDuration;
+            _playerSlider.duration = duration;
+        } else {
+            _playerSlider.duration = currentTime;
+        }
     } else {
         [self enableSeekControls];
         if (_isSliderAvailableTrackEnabled) {
@@ -492,26 +508,44 @@
         _playerSlider.duration = duration;
     }
     
-    if (!isfinite(time) && !isfinite(duration)) {
+    if (!isfinite(currentTime) && !isfinite(duration)) {
         _currentTimeLabel.text = kInitialTimeString;
         _durationLabel.text = kInitialTimeString;
     } else {
-        if (isfinite(time) && time > 0.0f) {
+        if (isfinite(currentTime)) {
             if (isfinite(duration) && duration > 0.0f) {
-                if (_playPositionAtEnd > 0.0f && time >= _playPositionAtEnd) {
-                    // hack
-                    time = duration;
+                if (currentTime > duration) {
+                    duration = currentTime;
                 }
-                _currentTimeLabel.text = [WZPlayTimeFormatter stringFromInterval:time];
-                _durationLabel.text = [WZPlayTimeFormatter stringFromInterval:-duration+time];
-                float minValue = [_scrubber minimumValue];
-                float maxValue = [_scrubber maximumValue];            
-                [_scrubber setValue:(maxValue - minValue) * time / duration + minValue];
+                _currentTimeLabel.text = [WZPlayTimeFormatter stringFromInterval:currentTime];
+                _durationLabel.text = [WZPlayTimeFormatter stringFromInterval:-duration+currentTime];
+                float minValue = _scrubber.minimumValue;
+                float maxValue = _scrubber.maximumValue;
+                _scrubber.value = (maxValue - minValue) * currentTime / duration + minValue;
             } else {                
-                _currentTimeLabel.text = [WZPlayTimeFormatter stringFromInterval:time];
+                _currentTimeLabel.text = [WZPlayTimeFormatter stringFromInterval:currentTime];
                 _durationLabel.text = kInitialTimeString;
-                [_scrubber setValue:1.0f];
+                _scrubber.value = 1.0f;
             }
+        } else {
+            _currentTimeLabel.text = kInitialTimeString;
+            if (isfinite(duration) && duration > 0.0f) {
+                _durationLabel.text = [WZPlayTimeFormatter stringFromInterval:duration];
+            } else {
+                _durationLabel.text = kInitialTimeString;                
+            }
+        }
+    }
+    
+    if (CMTIME_IS_INDEFINITE(playerDuration)) {
+        if (!_isLive) {
+            _isLive = YES;
+            [_delegate playerViewLiveDidChanged:self changeToValue:YES];
+        }
+    } else {
+        if (_isLive) {
+            _isLive = NO;
+            [_delegate playerViewLiveDidChanged:self changeToValue:NO];
         }
     }
 }
@@ -530,7 +564,7 @@
 
 - (IBAction)scrubing:(id)sender
 {
-    if (!_scrubbing) {
+    if (!self.isScrubbing) {
         [self beginScrubbing:sender];
     } else {
         [self scrub:sender];
@@ -556,7 +590,7 @@
             float value = [slider value];
             
             double time = duration * (value - minValue) / (maxValue - minValue);
-            if (![self isScrubbing]) {
+            if (!self.isScrubbing) {
                 [self seekToTime:time];
             } else {
                 if (_playerSlider && _playerSlider.isPopoverEnabled) {
@@ -575,7 +609,7 @@
 {
     [self resetIdleTimer];
     
-	if (_playerRateBeforeScrubbing) {
+	if (_playerRateBeforeScrubbing > 0.f) {
 		_player.rate = _playerRateBeforeScrubbing;
 		_playerRateBeforeScrubbing = 0.f;
 	}
