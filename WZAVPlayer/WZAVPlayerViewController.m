@@ -580,7 +580,12 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
                         }];
                         _initialPlaybackTime = 0.0;
                     } else {
-                        [me playerDidBeginPlayback];
+                        // AVPlayerStatusReadyToPlay will be fired after seeked on Live Streaming
+                        // check position
+                        double position = CMTimeGetSeconds([_player currentTime]);
+                        if (position < 3) {
+                            [me playerDidBeginPlayback];
+                        }
                     }
                 }
                     break;
