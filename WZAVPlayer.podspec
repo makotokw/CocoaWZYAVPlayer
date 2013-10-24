@@ -10,26 +10,31 @@ Pod::Spec.new do |s|
 
   s.subspec 'Core' do |sub|
     sub.requires_arc  = true
-    sub.source_files  = 'WZAVPlayer/*.{h,m}'
-    sub.resources     = 'WZAVPlayer/WZAVPlayerResources.bundle', 'WZAVPlayer/*.xib'
+    sub.source_files  = 'Classes/WZAVPlayer/Core/*.{h,m}'    
     sub.frameworks    = 'AVFoundation', 'CoreMedia'
-    sub.prefix_header_contents = <<EOC
-#ifdef __OBJC__
-    #import <WZAVPlayer.h>
-#endif
-EOC
+    sub.dependency 'BlocksKit', '~> 1.8.3'
   end
 
   s.subspec 'AirPlay' do |sub|
     sub.requires_arc  = true
+    sub.source_files  = 'Classes/WZAVPlayer/AirPlay/*.{h,m}'
+    sub.frameworks    = 'MediaPlayer'
   end
 
   s.subspec 'HUD' do |sub|
     sub.dependency 'MBProgressHUD'
   end
 
-  s.dependency 'BlocksKit', '~> 1.8.3'
-  s.dependency 'WZAVPlayer/HUD'
-  s.dependency 'WZAVPlayer/Core'
+  s.subspec 'Player' do |sub|
+    sub.dependency 'WZAVPlayer/HUD'
+    sub.dependency 'WZAVPlayer/Core'
+    sub.dependency 'WZAVPlayer/AirPlay'
+    sub.resources               = 'Resources/*.bundle', 'Resources/*.xib'
+    sub.prefix_header_contents  = <<EOC
+#ifdef __OBJC__
+    #import <WZAVPlayer/WZAVPlayer.h>
+#endif
+EOC
+  end
 
 end
