@@ -20,10 +20,15 @@ Pod::Spec.new do |s|
 EOC
   end
 
+  s.subspec 'AirPlay' do |sub|
+    sub.requires_arc  = true
+  end
+
   s.subspec 'HUD' do |sub|
     sub.dependency 'MBProgressHUD'
   end
 
+  s.dependency 'BlocksKit', '~> 1.8.3'
   s.dependency 'WZAVPlayer/HUD'
   s.dependency 'WZAVPlayer/Core'
 
