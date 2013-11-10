@@ -930,14 +930,15 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
     if (!self.isBeingDismissed) {
         
         if (error) {
-            NSString *description = error.localizedDescription;
+            NSString *description;
             if ([error.domain isEqualToString:AVFoundationErrorDomain]) {
-                if (error.localizedRecoverySuggestion) {
-                    description = [NSString stringWithFormat:@"%@ %@", error.localizedDescription, error.localizedRecoverySuggestion];
-                }
 #if DEBUG
                 NSString *enumString = [WZAVPlayerViewController AVFoundationErrorEnumStringFromCode:error.code];
-                description = [NSString stringWithFormat:@"%@(%@) %@", error.localizedDescription, enumString, error.localizedRecoverySuggestion];
+                errorMessage = [NSString stringWithFormat:@"%@(%@) %@", error.localizedDescription, enumString, error.localizedRecoverySuggestion];
+#else
+                if (error.localizedRecoverySuggestion) {
+                    errorMessage = [NSString stringWithFormat:@"%@ %@", error.localizedDescription, error.localizedRecoverySuggestion];
+                }
 #endif
             }
         }
