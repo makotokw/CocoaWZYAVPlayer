@@ -45,4 +45,20 @@
     return [self stringFromInterval:interval];
 }
 
++ (NSTimeInterval)timeIntervalFromPlayTime:(NSString *)playTime
+{
+    NSTimeInterval time = 0;
+    NSArray *components = [playTime componentsSeparatedByString:@":"];
+    
+    NSEnumerator *enumerator = [components reverseObjectEnumerator];
+    NSString *component;
+    NSInteger k = 1;
+    
+    while ((component = [enumerator nextObject])) {
+        time += [component floatValue] * k;
+        k *= 60;
+    }
+    return time;
+}
+
 @end

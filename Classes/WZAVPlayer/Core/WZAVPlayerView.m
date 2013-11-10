@@ -37,6 +37,7 @@
 
 @dynamic player;
 @dynamic title;
+@dynamic currentPosition;
 @synthesize estimateDuration = _estimateDuration;
 @dynamic backButtonHidden;
 @dynamic isPlayerOpened;
@@ -266,6 +267,11 @@
 {
 	AVPlayerLayer *playerLayer = (AVPlayerLayer *)self.layer;
 	playerLayer.videoGravity = fillMode;
+}
+
+- (NSTimeInterval)currentPosition
+{
+    return CMTimeGetSeconds(_player.currentTime);
 }
 
 - (CMTime)playerCurrentPosition

@@ -34,6 +34,7 @@
 @property (nonatomic, retain) IBOutlet UISlider *scrubber;
 
 @property (retain, readwrite) NSString *title;
+@property (assign, readonly) NSTimeInterval currentPosition;
 @property (assign, readwrite) NSTimeInterval estimateDuration;
 @property (assign, readonly) BOOL isPlayerOpened;
 @property (assign, readonly) BOOL isPlaying; // playing, except buffering
