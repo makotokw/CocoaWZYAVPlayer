@@ -1,13 +1,13 @@
 //
-//  WZPlayTimeFormatter.m
-//  WZAVPlayer
+//  WZYPlayTimeFormatter.m
+//  WZYAVPlayer
 //
-//  Copyright (c) 2012-2013 makoto_kw. All rights reserved.
+//  Copyright (c) 2012 makoto_kw. All rights reserved.
 //
 
-#import "WZPlayTimeFormatter.h"
+#import "WZYPlayTimeFormatter.h"
 
-@implementation WZPlayTimeFormatter
+@implementation WZYPlayTimeFormatter
 
 + (NSString*)stringFromInterval:(NSTimeInterval)interval
 {
@@ -24,9 +24,9 @@
     return [prefix stringByAppendingFormat:@"%d:%02d", min, (int)sec];
 }
 
-+ (NSString*)stringFromInterval:(NSTimeInterval)interval style:(WZPlayTimeFormatterStyle)style
++ (NSString*)stringFromInterval:(NSTimeInterval)interval style:(WZYPlayTimeFormatterStyle)style
 {
-    if (style == WZPlayTimeFormatterStyleMillSecond) {
+    if (style == WZYPlayTimeFormatterStyleMillSecond) {
         // TODO:
         NSTimeInterval sec = abs(interval);
         NSUInteger hour = (NSUInteger)sec/3600;

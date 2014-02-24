@@ -1,11 +1,11 @@
 //
-//  WZAVContent.h
-//  WZAVPlayer
+//  WZYAVContent.h
+//  WZYAVPlayer
 //
-//  Copyright (c) 2012-2013 makoto_kw. All rights reserved.
+//  Copyright (c) 2012 makoto_kw. All rights reserved.
 //
 
-@interface WZAVContent : NSObject
+@interface WZYAVContent : NSObject
 
 @property(retain, readwrite) NSURL *location;
 @property(retain, readwrite) NSString *title;

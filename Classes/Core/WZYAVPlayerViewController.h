@@ -1,25 +1,25 @@
 //
-//  WZAVPlayerViewController.h
-//  WZAVPlayer
+//  WZYAVPlayerViewController.h
+//  WZYAVPlayer
 //
-//  Copyright (c) 2012-2013 makoto_kw. All rights reserved.
+//  Copyright (c) 2012 makoto_kw. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 
-#import "WZAVPlayerView.h"
-#import "WZAVContent.h"
+#import "WZYAVPlayerView.h"
+#import "WZYAVContent.h"
 
-@interface WZAVPlayerViewController : UIViewController<WZAVPlayerViewDelegate>
+@interface WZYAVPlayerViewController : UIViewController<WZYAVPlayerViewDelegate>
 
 @property (nonatomic, copy) NSString *contentTitle;
 @property (nonatomic, copy) NSURL *contentURL;
 @property (retain, readonly) AVPlayer *player;
-@property (nonatomic, retain) WZAVPlayerView *playerView;
+@property (nonatomic, retain) WZYAVPlayerView *playerView;
 
 @property (assign, readwrite) BOOL backButtonHidden;
-@property (copy) WZAVPlayerBlock backBlock;
+@property (copy) WZYAVPlayerBlock backBlock;
 
 - (id)showProgressWithText:(NSString *)text;
 - (void)hideProgress;
@@ -37,7 +37,7 @@
 
 @end
 
-@interface WZAVPlayerViewController (Protected)
+@interface WZYAVPlayerViewController (Protected)
 
 - (NSTimeInterval)playerInitialPlayPosition;
 - (void)playerDidPrepare;

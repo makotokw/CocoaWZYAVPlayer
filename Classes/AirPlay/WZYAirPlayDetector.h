@@ -1,22 +1,22 @@
 //
-//  WZAirPlayDetector.h
-//  WZAVPlayer
+//  WZYAirPlayDetector.h
+//  WZYAVPlayer
 //
 //  based on https://github.com/StevePotter/AirPlayDetector
-//  Copyright (c) 2012-2013 makoto_kw. All rights reserved.
+//  Copyright (c) 2012 makoto_kw. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
 @class MPVolumeView;
 
-extern NSString *WZAirPlayAvailabilityChanged;
+extern NSString *WZYAirPlayAvailabilityChanged;
 
-@interface WZAirPlayDetector : NSObject
+@interface WZYAirPlayDetector : NSObject
 
 @property (readonly, nonatomic) BOOL isAirPlayAvailabled;
 
-+ (WZAirPlayDetector*)defaultDetector;
++ (WZYAirPlayDetector*)defaultDetector;
 
 - (void)startMonitoringWithVolumeView:(MPVolumeView *)volumeView;
 - (void)startMonitoringWithWindow:(UIWindow *)window;

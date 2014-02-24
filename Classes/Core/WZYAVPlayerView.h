@@ -1,24 +1,24 @@
 //
-//  WZAVPlayerView.h
-//  WZAVPlayer
+//  WZYAVPlayerView.h
+//  WZYAVPlayer
 //
-//  Copyright (c) 2012-2013 makoto_kw. All rights reserved.
+//  Copyright (c) 2012 makoto_kw. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
-#import "WZAVPlayerDefines.h"
+#import "WZYAVPlayerDefines.h"
 
-@class WZAVPlayerView;
-@protocol WZAVPlayerViewDelegate <NSObject>
-- (void)playerViewLiveDidChanged:(WZAVPlayerView *)view changeToValue:(BOOL)isLive;
-- (void)playerViewSeekingBegan:(WZAVPlayerView *)view;
-- (void)playerViewSeekingCompletation:(WZAVPlayerView *)view;
+@class WZYAVPlayerView;
+@protocol WZYAVPlayerViewDelegate <NSObject>
+- (void)playerViewLiveDidChanged:(WZYAVPlayerView *)view changeToValue:(BOOL)isLive;
+- (void)playerViewSeekingBegan:(WZYAVPlayerView *)view;
+- (void)playerViewSeekingCompletation:(WZYAVPlayerView *)view;
 @end
 
-@interface WZAVPlayerView : UIView <UIGestureRecognizerDelegate>
+@interface WZYAVPlayerView : UIView <UIGestureRecognizerDelegate>
 
-@property (weak) id<WZAVPlayerViewDelegate> delegate;
+@property (weak) id<WZYAVPlayerViewDelegate> delegate;
 
 @property (nonatomic, retain) AVPlayer *player;
 
@@ -44,15 +44,15 @@
 @property (assign, readwrite) BOOL isSliderAvailableTrackEnabled;
 
 @property (assign, readwrite) BOOL backButtonHidden;
-@property (copy) WZAVPlayerBlock backBlock;
+@property (copy) WZYAVPlayerBlock backBlock;
 
 - (IBAction)beginScrubbing:(id)sender;
 - (IBAction)scrub:(id)sender;
 - (IBAction)endScrubbing:(id)sender;
 - (IBAction)toggleFullscreenStyle:(id)sender;
 
-- (void)seekToTime:(NSTimeInterval)time completionHandler:(WZAVPlayerBlock)completionHandler;
-- (void)seekFromCurrentTime:(NSTimeInterval)interval completionHandler:(WZAVPlayerBlock)completionHandler;
+- (void)seekToTime:(NSTimeInterval)time completionHandler:(WZYAVPlayerBlock)completionHandler;
+- (void)seekFromCurrentTime:(NSTimeInterval)interval completionHandler:(WZYAVPlayerBlock)completionHandler;
 
 - (void)presentOverlayWithDuration:(NSTimeInterval)duration;
 - (void)dismissOverlayWithDuration:(NSTimeInterval)duration;

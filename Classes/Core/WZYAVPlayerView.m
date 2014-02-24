@@ -1,26 +1,26 @@
 //
-//  WZAVPlayerView.m
-//  WZAVPlayer
+//  WZYAVPlayerView.m
+//  WZYAVPlayer
 //
-//  Copyright (c) 2012-2013 makoto_kw. All rights reserved.
+//  Copyright (c) 2012 makoto_kw. All rights reserved.
 //
 
-#import "WZAVPlayerView.h"
-#import "WZPlayerSlider.h"
-#import "WZPlayTimeFormatter.h"
+#import "WZYAVPlayerView.h"
+#import "WZYPlayerSlider.h"
+#import "WZYPlayTimeFormatter.h"
 
 #define kMaxIdleTimeSecondsToHideOlverlay 6.0
 #define kInitialTimeString @"--:--"
 
-@interface WZAVPlayerView()
+@interface WZYAVPlayerView()
 @end
 
-@implementation WZAVPlayerView
+@implementation WZYAVPlayerView
 
 {
     AVPlayer *_player;
     
-    WZPlayerSlider *_playerSlider;
+    WZYPlayerSlider *_playerSlider;
     
     BOOL _isLive;
     BOOL _backButtonHidden;
@@ -71,16 +71,16 @@
     }
     
     _backButton.titleLabel.text = nil;
-    [_backButton setImage:[UIImage imageNamed:@"WZAVPlayerResources.bundle/back.png"] forState:UIControlStateNormal];
+    [_backButton setImage:[UIImage imageNamed:@"WZYAVPlayerResources.bundle/back.png"] forState:UIControlStateNormal];
     
-    _playButtonImage = [UIImage imageNamed:@"WZAVPlayerResources.bundle/play.png"];
-    _pauseButtonImage = [UIImage imageNamed:@"WZAVPlayerResources.bundle/pause.png"];
+    _playButtonImage = [UIImage imageNamed:@"WZYAVPlayerResources.bundle/play.png"];
+    _pauseButtonImage = [UIImage imageNamed:@"WZYAVPlayerResources.bundle/pause.png"];
     
     [_playButton setTitle:nil forState:UIControlStateNormal];
     [_playButton setImage:_playButtonImage forState:UIControlStateNormal];
     
-    if ([_scrubber.class isSubclassOfClass:[WZPlayerSlider class]]) {
-        _playerSlider = (WZPlayerSlider *)_scrubber;
+    if ([_scrubber.class isSubclassOfClass:[WZYPlayerSlider class]]) {
+        _playerSlider = (WZYPlayerSlider *)_scrubber;
     }
         
     [self bindTouchEventsToScrubber];
@@ -205,7 +205,7 @@
 
 - (void)toggleOverlayWithDuration:(NSTimeInterval)duration
 {
-    __weak WZAVPlayerView *me = self;
+    __weak WZYAVPlayerView *me = self;
     [UIView animateWithDuration:duration
                      animations:^{
                          if (_headerView.alpha == 0.0) {
@@ -305,7 +305,7 @@
 
 - (BOOL)isPlaying
 {
-    WZLogD(@"WZAVPlayerView.isPlaying: AVPlayer.rate = %lf", _player.rate);
+    WZYLogD(@"WZYAVPlayerView.isPlaying: AVPlayer.rate = %lf", _player.rate);
 	return _playerRateBeforeScrubbing != 0.f || _player.rate != 0.f;
 }
 
@@ -438,7 +438,7 @@
 - (void)addPlayerTimeObserverForInterval:(NSTimeInterval)interval
 {
     if (!_timeObserver) {
-        __weak WZAVPlayerView *me = self;
+        __weak WZYAVPlayerView *me = self;
         _timeObserver = [_player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(interval, NSEC_PER_SEC)
                                                               queue:NULL
                                                          usingBlock:^(CMTime time)
@@ -523,20 +523,20 @@
                 if (currentTime > duration) {
                     duration = currentTime;
                 }
-                _currentTimeLabel.text = [WZPlayTimeFormatter stringFromInterval:currentTime];
-                _durationLabel.text = [WZPlayTimeFormatter stringFromInterval:-duration+currentTime];
+                _currentTimeLabel.text = [WZYPlayTimeFormatter stringFromInterval:currentTime];
+                _durationLabel.text = [WZYPlayTimeFormatter stringFromInterval:-duration+currentTime];
                 float minValue = _scrubber.minimumValue;
                 float maxValue = _scrubber.maximumValue;
                 _scrubber.value = (maxValue - minValue) * currentTime / duration + minValue;
             } else {                
-                _currentTimeLabel.text = [WZPlayTimeFormatter stringFromInterval:currentTime];
+                _currentTimeLabel.text = [WZYPlayTimeFormatter stringFromInterval:currentTime];
                 _durationLabel.text = kInitialTimeString;
                 _scrubber.value = 1.0f;
             }
         } else {
             _currentTimeLabel.text = kInitialTimeString;
             if (isfinite(duration) && duration > 0.0f) {
-                _durationLabel.text = [WZPlayTimeFormatter stringFromInterval:duration];
+                _durationLabel.text = [WZYPlayTimeFormatter stringFromInterval:duration];
             } else {
                 _durationLabel.text = kInitialTimeString;                
             }
@@ -602,8 +602,8 @@
                 if (_playerSlider && _playerSlider.isPopoverEnabled) {
                     // TODO:
                 } else {
-                    _currentTimeLabel.text = [WZPlayTimeFormatter stringFromInterval:time];
-                    _durationLabel.text = [WZPlayTimeFormatter stringFromInterval:-duration+time];
+                    _currentTimeLabel.text = [WZYPlayTimeFormatter stringFromInterval:time];
+                    _durationLabel.text = [WZYPlayTimeFormatter stringFromInterval:-duration+time];
                 }
             }
         }
@@ -634,10 +634,10 @@
     return (_seekingToTime != 0.0f);
 }
 
-- (void)seekToTime:(NSTimeInterval)time completionHandler:(WZAVPlayerBlock)completionHandler
+- (void)seekToTime:(NSTimeInterval)time completionHandler:(WZYAVPlayerBlock)completionHandler
 {
     _seekingToTime = time;
-    __weak WZAVPlayerView *me = self;
+    __weak WZYAVPlayerView *me = self;
     [me.delegate playerViewSeekingBegan:self];
     [_player seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) completionHandler:^(BOOL finished) {
         if (_seekingToTime == time) {
@@ -655,7 +655,7 @@
     [self seekToTime:time completionHandler:nil];
 }
 
-- (void)seekFromCurrentTime:(NSTimeInterval)interval completionHandler:(WZAVPlayerBlock)completionHandler
+- (void)seekFromCurrentTime:(NSTimeInterval)interval completionHandler:(WZYAVPlayerBlock)completionHandler
 {
     NSTimeInterval time = CMTimeGetSeconds(_player.currentTime);
     time += interval;

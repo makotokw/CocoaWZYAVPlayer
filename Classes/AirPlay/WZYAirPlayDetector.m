@@ -1,33 +1,33 @@
 //
-//  WZAirPlayDetector.m
-//  WZAVPlayer
+//  WZYAirPlayDetector.m
+//  WZYAVPlayer
 //
 //  based on https://github.com/StevePotter/AirPlayDetector
-//  Copyright (c) 2012-2013 makoto_kw. All rights reserved.
+//  Copyright (c) 2012 makoto_kw. All rights reserved.
 //
 
-#import "WZAirPlayDetector.h"
+#import "WZYAirPlayDetector.h"
 
 #import <MediaPlayer/MediaPlayer.h>
 
-NSString *WZAirPlayAvailabilityChanged = @"WZAirPlayAvailabilityChanged";
+NSString *WZYAirPlayAvailabilityChanged = @"WZYAirPlayAvailabilityChanged";
 
 NSString *const kAlphaKey = @"alpha";
 
-@implementation WZAirPlayDetector
+@implementation WZYAirPlayDetector
 {
     UIButton *_routeButton;
 }
 
 @synthesize isAirPlayAvailabled = _isAirPlayAvailabled;
 
-+ (WZAirPlayDetector *)defaultDetector
++ (WZYAirPlayDetector *)defaultDetector
 {
-    static WZAirPlayDetector *defaultDetector = nil;
+    static WZYAirPlayDetector *defaultDetector = nil;
     
     @synchronized(self) {
         if (!defaultDetector) {
-            defaultDetector = [[WZAirPlayDetector alloc] init];
+            defaultDetector = [[WZYAirPlayDetector alloc] init];
         }
         
         return defaultDetector;
@@ -87,7 +87,7 @@ NSString *const kAlphaKey = @"alpha";
     
     if (isAvailabled != _isAirPlayAvailabled) {
         _isAirPlayAvailabled = isAvailabled;
-        [[NSNotificationCenter defaultCenter] postNotificationName:WZAirPlayAvailabilityChanged object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:WZYAirPlayAvailabilityChanged object:self];
     }
 }
 

@@ -1,13 +1,13 @@
 //
-//  WZAVPlayerViewController.m
-//  WZAVPlayer
+//  WZYAVPlayerViewController.m
+//  WZYAVPlayer
 //
-//  Copyright (c) 2012-2013 makoto_kw. All rights reserved.
+//  Copyright (c) 2012 makoto_kw. All rights reserved.
 //
 
-#import "WZAVPlayerDefines.h"
-#import "WZAVPlayerViewController.h"
-#import "WZAVPlayerView.h"
+#import "WZYAVPlayerDefines.h"
+#import "WZYAVPlayerViewController.h"
+#import "WZYAVPlayerView.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <BlocksKit/UIAlertView+BlocksKit.h>
@@ -25,12 +25,12 @@ NSString * const kPlaybackLikelyToKeepUp    = @"playbackLikelyToKeepUp";
 NSString * const kRateKey			= @"rate";
 NSString * const kCurrentItemKey	= @"currentItem";
 
-@interface WZAVPlayerViewController ()
+@interface WZYAVPlayerViewController ()
 {
     NSString *_contentTitle;
 	NSURL *_contentURL;
     
-    WZAVPlayerBlock _backBlock;
+    WZYAVPlayerBlock _backBlock;
     BOOL _backButtonHidden;
     
 	AVPlayer *_player;
@@ -45,12 +45,12 @@ NSString * const kCurrentItemKey	= @"currentItem";
 }
 @end
 
-static void *WZAVPlayerViewControllerRateObservationContext = &WZAVPlayerViewControllerRateObservationContext;
-static void *WZAVPlayerViewControllerStatusObservationContext = &WZAVPlayerViewControllerStatusObservationContext;
-static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayerViewControllerCurrentItemObservationContext;
+static void *WZYAVPlayerViewControllerRateObservationContext = &WZYAVPlayerViewControllerRateObservationContext;
+static void *WZYAVPlayerViewControllerStatusObservationContext = &WZYAVPlayerViewControllerStatusObservationContext;
+static void *WZYAVPlayerViewControllerCurrentItemObservationContext = &WZYAVPlayerViewControllerCurrentItemObservationContext;
 
 #pragma mark -
-@implementation WZAVPlayerViewController
+@implementation WZYAVPlayerViewController
 
 @synthesize playerView = _playerView;
 @dynamic contentURL, contentTitle;
@@ -67,7 +67,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
 
 - (NSString *)playerViewNibNamed
 {
-    return NSStringFromClass([WZAVPlayerView class]);
+    return NSStringFromClass([WZYAVPlayerView class]);
 }
 
 - (id)playerView
@@ -75,10 +75,10 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
     return self.view;
 }
 
-- (WZAVPlayerView *)createPlayerView
+- (WZYAVPlayerView *)createPlayerView
 {
     UIView *view = [[[NSBundle mainBundle] loadNibNamed:[self playerViewNibNamed] owner:self options:nil] objectAtIndex:0];
-    return (WZAVPlayerView *)view;
+    return (WZYAVPlayerView *)view;
 }
 
 - (void)viewDidLoad
@@ -89,8 +89,8 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
     
     // First, check view as PlayerView
     UIView *view = [self playerView];
-    if ([view isKindOfClass:[WZAVPlayerView class]]) {
-        _playerView = (WZAVPlayerView *)view;
+    if ([view isKindOfClass:[WZYAVPlayerView class]]) {
+        _playerView = (WZYAVPlayerView *)view;
     } else {
         // add playerView from xib file
         _playerView = [self createPlayerView];
@@ -143,7 +143,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
 
 - (NSString *)localizedStringWithKey:(NSString *)key
 {
-    return NSLocalizedStringFromTable(key, @"WZAVPlayerStrings", nil);
+    return NSLocalizedStringFromTable(key, @"WZYAVPlayerStrings", nil);
 }
 
 - (void)observeAVPlayer:(AVPlayer *)player
@@ -151,12 +151,12 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
     [player addObserver:self
               forKeyPath:kCurrentItemKey
                  options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                 context:WZAVPlayerViewControllerCurrentItemObservationContext];
+                 context:WZYAVPlayerViewControllerCurrentItemObservationContext];
     
     [player addObserver:self
               forKeyPath:kRateKey
                  options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                 context:WZAVPlayerViewControllerRateObservationContext];
+                 context:WZYAVPlayerViewControllerRateObservationContext];
 }
 
 - (void)observeAVPlayerItem:(AVPlayerItem *)playerItem
@@ -166,17 +166,17 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
     [playerItem addObserver:self
                   forKeyPath:kStatusKey
                      options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                     context:WZAVPlayerViewControllerStatusObservationContext];
+                     context:WZYAVPlayerViewControllerStatusObservationContext];
     
     [playerItem addObserver:self
                   forKeyPath:kPlaybackBufferEmpty
                      options:NSKeyValueObservingOptionNew
-                     context:WZAVPlayerViewControllerStatusObservationContext];
+                     context:WZYAVPlayerViewControllerStatusObservationContext];
     
     [playerItem addObserver:self
                   forKeyPath:kPlaybackLikelyToKeepUp
                      options:NSKeyValueObservingOptionNew
-                     context:WZAVPlayerViewControllerStatusObservationContext];
+                     context:WZYAVPlayerViewControllerStatusObservationContext];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(playerItemDidReachEnd:)
@@ -238,12 +238,12 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
     }    
 }
 
-- (WZAVPlayerBlock)backBlock
+- (WZYAVPlayerBlock)backBlock
 {
     return (_playerView) ? _playerView.backBlock : _backBlock;
 }
 
-- (void)setBackBlock:(WZAVPlayerBlock)backBlock
+- (void)setBackBlock:(WZYAVPlayerBlock)backBlock
 {
     if (_playerView) {
         _playerView.backBlock = backBlock;
@@ -284,7 +284,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
     
     NSArray *requestedKeys = [NSArray arrayWithObjects:kTracksKey, kPlayableKey, nil];
     
-    WZAVPlayerViewController *me = self;
+    WZYAVPlayerViewController *me = self;
     [asset loadValuesAsynchronouslyForKeys:requestedKeys completionHandler:
      ^{
          dispatch_async( dispatch_get_main_queue(),
@@ -323,8 +323,8 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
 
 - (void)tryAutoPlayWithDelay:(NSTimeInterval)delay
 {
-    WZLogD(@"WZAVPlayerViewController.tryRestartPlayWithDelay:%lf", delay);
-    __weak WZAVPlayerViewController *me = self;
+    WZYLogD(@"WZYAVPlayerViewController.tryRestartPlayWithDelay:%lf", delay);
+    __weak WZYAVPlayerViewController *me = self;
     dispatch_time_t tt = dispatch_time(DISPATCH_TIME_NOW, (delay * NSEC_PER_SEC));
     dispatch_after(tt, dispatch_get_main_queue(), ^{
         if (_mediaEnded || _playerView.isPaused) { // ignore media is end
@@ -411,18 +411,18 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
 
 - (void)playerItemDidReachEnd:(NSNotification *)notification
 {
-    WZLogD(@"WZAVPlayerViewController.playerItemDidReachEnd");
+    WZYLogD(@"WZYAVPlayerViewController.playerItemDidReachEnd");
     [self playerDidReachEndPlayback];
 }
 
 - (void)playerItemFailedEnd:(NSNotification *)notification
 {
-    WZLogD(@"WZAVPlayerViewController.playerItemFailedEnd");
+    WZYLogD(@"WZYAVPlayerViewController.playerItemFailedEnd");
 }
 
 - (void)playerItemDidPlaybackStalled:(NSNotification *)notification
 {
-    WZLogD(@"WZAVPlayerViewController.playerItemDidPlaybackStalled");
+    WZYLogD(@"WZYAVPlayerViewController.playerItemDidPlaybackStalled");
 }
 
 #pragma mark -
@@ -470,7 +470,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
 								   localizedDescription, NSLocalizedDescriptionKey,
 								   localizedFailureReason, NSLocalizedFailureReasonErrorKey,
 								   nil];
-		NSError *assetCannotBePlayedError = [NSError errorWithDomain:@"WZAVPayerViewController" code:0 userInfo:errorDict];
+		NSError *assetCannotBePlayedError = [NSError errorWithDomain:@"WZYAVPayerViewController" code:0 userInfo:errorDict];
         [self assetFailedToPrepareForPlayback:assetCannotBePlayedError];
         return;
     }
@@ -518,19 +518,19 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
                         change:(NSDictionary*)change
                        context:(void*)context
 {
-	if (context == WZAVPlayerViewControllerStatusObservationContext) {
+	if (context == WZYAVPlayerViewControllerStatusObservationContext) {
         if ([keyPath isEqualToString:kPlaybackBufferEmpty]) {
             if (_playerItem.playbackBufferEmpty) {
-                WZLogD(@"AVPlayerItem.playbackBufferEmpty = YES");
+                WZYLogD(@"AVPlayerItem.playbackBufferEmpty = YES");
                 [self showProgressMessageWithText:[self localizedStringWithKey:@"Loading..."]];
                 _buffering = YES;
             } else {
-                WZLogD(@"AVPlayerItem.playbackBufferEmpty = NO");
+                WZYLogD(@"AVPlayerItem.playbackBufferEmpty = NO");
                 [self tryAutoPlayWithDelay:5];
             }
         } else if ([keyPath isEqualToString:kPlaybackLikelyToKeepUp]) {
             if (_playerItem.playbackLikelyToKeepUp) {
-                WZLogD(@"AVPlayerItem.playbackLikelyToKeepUp = YES, Buffering = %d", _buffering);
+                WZYLogD(@"AVPlayerItem.playbackLikelyToKeepUp = YES, Buffering = %d", _buffering);
                 if (_buffering) {
                     _buffering = NO;
                     [self tryAutoPlayWithDelay:0.5];
@@ -538,7 +538,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
                     [self refreshForReadyToPlayIfPlayingWithDelay:0.25];
                 }
             } else {
-//                WZLogD(@"AVPlayerItem.playbackLikelyToKeepUp = NO");
+//                WZYLogD(@"AVPlayerItem.playbackLikelyToKeepUp = NO");
 //                [self showProgressMessageWithText:[self localizedStringWithKey:@"Loading..."]];
 //                [_player pause];
             }
@@ -552,7 +552,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
             switch (status) {
                 case AVPlayerStatusUnknown:
                 {
-                    WZLogD(@"AVPlayerItem.status = AVPlayerStatusUnknown");
+                    WZYLogD(@"AVPlayerItem.status = AVPlayerStatusUnknown");
                     [_playerView endPlayerTimeObserver];                    
                     [_playerView refreshPlayPosition];
                     [_playerView disableControls];
@@ -561,7 +561,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
                     
                 case AVPlayerStatusReadyToPlay:
                 {
-                    WZLogD(@"AVPlayerItem.status = AVPlayerStatusReadyToPlay");
+                    WZYLogD(@"AVPlayerItem.status = AVPlayerStatusReadyToPlay");
 
                     // AVPlayer will get this status when it returns from background task.
                     _readyToPlayTime = [[NSDate date] timeIntervalSince1970];
@@ -573,7 +573,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
                     
                     NSTimeInterval initialPlaybackPosition = [self playerInitialPlayPosition];
                     
-                    __weak WZAVPlayerViewController *me = self;
+                    __weak WZYAVPlayerViewController *me = self;
                     if (initialPlaybackPosition > 0) {
                         [_playerView seekToTime:initialPlaybackPosition completionHandler:^{
                             [me playerDidBeginPlayback];
@@ -592,7 +592,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
                     
                 case AVPlayerStatusFailed:
                 {
-                    WZLogD(@"AVPlayerItem.status = AVPlayerStatusFailed");
+                    WZYLogD(@"AVPlayerItem.status = AVPlayerStatusFailed");
                     AVPlayerItem *playerItem = (AVPlayerItem *)object;
                     if (_playerItem == playerItem) {
                         [self assetFailedToPrepareForPlayback:playerItem.error];
@@ -603,7 +603,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
         }
 	}
     
-	else if (context == WZAVPlayerViewControllerRateObservationContext) {
+	else if (context == WZYAVPlayerViewControllerRateObservationContext) {
         [_playerView refreshControls];
         // ignore when reopening
         if (_player.rate == 1.0 && !_reopening) {
@@ -611,7 +611,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
         }
 	}
 
-	else if (context == WZAVPlayerViewControllerCurrentItemObservationContext) {
+	else if (context == WZYAVPlayerViewControllerCurrentItemObservationContext) {
         AVPlayerItem *newPlayerItem = [change objectForKey:NSKeyValueChangeNewKey];        
         if (newPlayerItem == (id)[NSNull null]) {
             [_playerView close];
@@ -679,7 +679,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
 
 - (void)refreshForReadyToPlayIfPlayingWithDelay:(NSTimeInterval)delay
 {
-    __weak WZAVPlayerViewController *me = self;
+    __weak WZYAVPlayerViewController *me = self;
     dispatch_time_t tt = dispatch_time(DISPATCH_TIME_NOW, (delay * NSEC_PER_SEC));
     dispatch_after(tt, dispatch_get_main_queue(), ^{
         [me refreshForReadyToPlayIfPlaying];
@@ -688,7 +688,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
 
 #pragma mark - PlayerView Delegate
 
-- (void)playerViewLiveDidChanged:(WZAVPlayerView *)view changeToValue:(BOOL)isLive
+- (void)playerViewLiveDidChanged:(WZYAVPlayerView *)view changeToValue:(BOOL)isLive
 {
     // LiveMode to RecordedMode, then reopen and play
     if (!isLive) {
@@ -696,14 +696,14 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
     }
 }
 
-- (void)playerViewSeekingBegan:(WZAVPlayerView *)view
+- (void)playerViewSeekingBegan:(WZYAVPlayerView *)view
 {
     if (!_contentURL.isFileURL) {
         [self showProgressMessageWithText:[self localizedStringWithKey:@"Loading..."]];
     }
 }
 
-- (void)playerViewSeekingCompletation:(WZAVPlayerView *)view
+- (void)playerViewSeekingCompletation:(WZYAVPlayerView *)view
 {
     if (!_contentURL.isFileURL) {
         [self refreshForReadyToPlayIfPlaying];
@@ -875,7 +875,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
 
 #pragma mark -
 
-@implementation WZAVPlayerViewController (Protected)
+@implementation WZYAVPlayerViewController (Protected)
 
 - (NSTimeInterval)playerInitialPlayPosition
 {
@@ -884,7 +884,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
 
 - (void)playerDidPrepare
 {
-    WZLogD(@"WZAVPlayerViewController.playerDidPrepare");
+    WZYLogD(@"WZYAVPlayerViewController.playerDidPrepare");
     _mediaEnded = NO;
     [_playerView refreshControls];
     [_playerView resetPlayPosition];
@@ -892,7 +892,7 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
 
 - (void)playerDidReadyPlayback
 {
-    WZLogD(@"WZAVPlayerViewController.playerDidReadyPlayback");
+    WZYLogD(@"WZYAVPlayerViewController.playerDidReadyPlayback");
     _player.actionAtItemEnd = AVPlayerActionAtItemEndPause;
     [self hideProgress];
     [_playerView refreshControls];
@@ -900,27 +900,27 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
 
 - (void)playerDidBeginPlayback
 {
-    WZLogD(@"WZAVPlayerViewController.playerDidBeginPlayback");
+    WZYLogD(@"WZYAVPlayerViewController.playerDidBeginPlayback");
     [_playerView dismissOverlayWithDuration:0.25f];
     [self tryAutoPlayWithDelay:0.5];
 }
 
 - (void)playerDidEndPlayback
 {
-    WZLogD(@"WZAVPlayerViewController.playerDidEndPlayback");
+    WZYLogD(@"WZYAVPlayerViewController.playerDidEndPlayback");
     [self close];
 }
 
 - (void)playerDidReachEndPlayback
 {
-    WZLogD(@"WZAVPlayerViewController.playerDidReachEndPlayback");
+    WZYLogD(@"WZYAVPlayerViewController.playerDidReachEndPlayback");
     _mediaEnded = YES;
     [self close];
 }
 
 - (void)playerDidReplaceFromPlayer:(AVPlayer *)oldPlayer
 {
-    WZLogD(@"WZAVPlayerViewController.playerDidReplaceFromPlayer");
+    WZYLogD(@"WZYAVPlayerViewController.playerDidReplaceFromPlayer");
 }
 
 - (void)playerFailedToPrepareForPlayback:(NSError *)error
@@ -930,10 +930,9 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
     if (!self.isBeingDismissed) {
         
         if (error) {
-            NSString *description;
             if ([error.domain isEqualToString:AVFoundationErrorDomain]) {
 #if DEBUG
-                NSString *enumString = [WZAVPlayerViewController AVFoundationErrorEnumStringFromCode:error.code];
+                NSString *enumString = [WZYAVPlayerViewController AVFoundationErrorEnumStringFromCode:error.code];
                 errorMessage = [NSString stringWithFormat:@"%@(%@) %@", error.localizedDescription, enumString, error.localizedRecoverySuggestion];
 #else
                 if (error.localizedRecoverySuggestion) {
@@ -943,8 +942,8 @@ static void *WZAVPlayerViewControllerCurrentItemObservationContext = &WZAVPlayer
             }
         }
         
-        __weak WZAVPlayerViewController *me = self;
-        [UIAlertView showAlertViewWithTitle:[self localizedStringWithKey:@"Can Not Play"]
+        __weak WZYAVPlayerViewController *me = self;
+        [UIAlertView bk_showAlertViewWithTitle:[self localizedStringWithKey:@"Can Not Play"]
                                     message:errorMessage
                           cancelButtonTitle:@"OK"
                           otherButtonTitles:nil

@@ -1,17 +1,17 @@
-WZAVPlayer
+WZYAVPlayer
 =====
 
-**WZAVPlayer is stall in progress.**
-WZAVPlayer is a control to play a video.
+**WZYAVPlayer is stall in progress.**
+WZYAVPlayer is a control to play a video.
 
 ## Requirements
 
-WZAVPlayer requires iOS 5 or later. Also, it is deployed for an ARC environment.
+WZYAVPlayer requires iOS 5 or later. Also, it is deployed for an ARC environment.
 
 ## AirPlayDetecotr
 
 ```ruby:Podfile
-pod 'WZAVPlayer/AirPlay', :git => 'https://github.com/makotokw/CocoaWZAVPlayer.git'
+pod 'WZYAVPlayer/AirPlay', :git => 'https://github.com/makotokw/CocoaWZYAVPlayer.git'
 ```
 
 ## License
