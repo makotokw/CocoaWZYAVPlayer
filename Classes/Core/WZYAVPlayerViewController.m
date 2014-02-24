@@ -13,17 +13,17 @@
 #import <BlocksKit/UIAlertView+BlocksKit.h>
 
 /* Asset keys */
-NSString * const kTracksKey         = @"tracks";
-NSString * const kPlayableKey		= @"playable";
+static NSString * const kTracksKey         = @"tracks";
+static NSString * const kPlayableKey		= @"playable";
 
 /* PlayerItem keys */
-NSString * const kStatusKey                 = @"status";
-NSString * const kPlaybackBufferEmpty       = @"playbackBufferEmpty";
-NSString * const kPlaybackLikelyToKeepUp    = @"playbackLikelyToKeepUp";
+static NSString * const kStatusKey                 = @"status";
+static NSString * const kPlaybackBufferEmpty       = @"playbackBufferEmpty";
+static NSString * const kPlaybackLikelyToKeepUp    = @"playbackLikelyToKeepUp";
 
 /* AVPlayer keys */
-NSString * const kRateKey			= @"rate";
-NSString * const kCurrentItemKey	= @"currentItem";
+static NSString * const kRateKey			= @"rate";
+static NSString * const kCurrentItemKey	= @"currentItem";
 
 @interface WZYAVPlayerViewController ()
 {
