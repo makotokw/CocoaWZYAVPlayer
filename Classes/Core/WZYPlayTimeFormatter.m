@@ -19,9 +19,9 @@
     
     NSString *prefix = ( interval < 0  ) ? @"-" : @"";    
     if (hour >= 1) {
-        return [prefix stringByAppendingFormat:@"%d:%02d:%02d", hour, min, (int)sec];
+        return [prefix stringByAppendingFormat:@"%d:%02d:%02d", (int)hour, (int)min, (int)sec];
     }
-    return [prefix stringByAppendingFormat:@"%d:%02d", min, (int)sec];
+    return [prefix stringByAppendingFormat:@"%d:%02d", (int)min, (int)sec];
 }
 
 + (NSString*)stringFromInterval:(NSTimeInterval)interval style:(WZYPlayTimeFormatterStyle)style
