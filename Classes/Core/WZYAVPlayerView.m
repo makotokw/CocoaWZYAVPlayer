@@ -6,8 +6,9 @@
 //
 
 #import "WZYAVPlayerView.h"
-#import "WZYPlayerSlider.h"
 #import "WZYPlayTimeFormatter.h"
+
+#import <WZYPlayerSlider/WZYPlayerSlider.h>
 
 #define kMaxIdleTimeSecondsToHideOlverlay 6.0
 #define kInitialTimeString @"--:--"

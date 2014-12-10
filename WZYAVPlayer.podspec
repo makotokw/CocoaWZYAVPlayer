@@ -12,6 +12,7 @@ Pod::Spec.new do |s|
     sub.requires_arc  = true
     sub.source_files  = 'Classes/Core/*.{h,m}'
     sub.frameworks    = 'AVFoundation', 'CoreMedia'
+    sub.dependency 'WZYPlayerSlider'
     sub.dependency 'MBProgressHUD'
     sub.dependency 'BlocksKit/UIKit', '~> 2.0'
   end
