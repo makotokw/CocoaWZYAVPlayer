@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
   s.name     = "WZYAVPlayer"
-  s.version  = "0.1"
+  s.version  = "0.1.1"
   s.summary  = "UI Controls to play video."
   s.homepage = "https://github.com/makotokw/CocoaWZYAVPlayer"
   s.license  = { :type => 'MIT License', :file => 'LICENSE' }
   s.author   = { "Makoto Kawasaki" => "makoto.kw@gmail.com" }
-  s.source   = { :git => "https://github.com/makotokw/CocoaWZYAVPlayer.git", :tag => 'v0.1' }
+  s.source   = { :git => "https://github.com/makotokw/CocoaWZYAVPlayer.git", :tag => 'v0.1.1' }
   s.platform = :ios, '6.0'
 
   s.subspec 'Core' do |sub|
